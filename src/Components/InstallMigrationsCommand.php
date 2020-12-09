@@ -36,6 +36,13 @@ abstract class InstallMigrationsCommand extends BaseCommand
             }
         }
         foreach ($migrations as $originFile => $targetFile) {
+            $className = $this->getMigrationClassNameFromFile($originFile);
+            if (class_exists($className)) {
+                $message = "{$className} from migration {$originFile} already exist, continue copying this migration?";
+                if (!$this->confirm($message, false)) {
+                    continue;
+                }
+            }
             copy($originFile, $targetFile);
         }
     }

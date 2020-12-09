@@ -5,6 +5,7 @@ namespace Dskripchenko\LaravelCMI\Components;
 
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -72,5 +73,22 @@ class BaseCommand extends Command
             ]
         );
         return Str::camel($name);
+    }
+
+    /**
+     * @param $file
+     * @return false|string
+     */
+    protected function getMigrationClassNameFromFile($file)
+    {
+        if(!is_file($file)) {
+            return false;
+        }
+
+        $fileContent = file_get_contents($file);
+        $pattern = "/^[\s]*?class[\s]*?(?<class>[\S]+?)[\s][\s\S]*?Migration/m";
+        preg_match($pattern, $fileContent, $matches);
+
+        return Arr::get($matches, 'class', false);
     }
 }
