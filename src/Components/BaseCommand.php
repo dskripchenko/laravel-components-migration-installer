@@ -81,7 +81,7 @@ class BaseCommand extends Command
      */
     protected function getMigrationClassNameFromFile($file)
     {
-        if(!is_file($file)) {
+        if (!is_file($file)) {
             return false;
         }
 
@@ -90,5 +90,31 @@ class BaseCommand extends Command
         preg_match($pattern, $fileContent, $matches);
 
         return Arr::get($matches, 'class', false);
+    }
+
+    /**
+     * @param $className
+     * @return bool
+     */
+    protected function isMigrationClassNameExists($className)
+    {
+        $this->preloadMigrationFiles();
+        return class_exists($className);
+    }
+
+
+    protected function preloadMigrationFiles()
+    {
+        static $isMigrationLoaded = false;
+        if (!$isMigrationLoaded) {
+            $isMigrationLoaded = true;
+            $dir = database_path('migrations');
+            foreach (scandir($dir) as $filename) {
+                $filepath = "{$dir}/{$filename}";
+                if (is_file($filepath)) {
+                    require_once $filepath;
+                }
+            }
+        }
     }
 }
