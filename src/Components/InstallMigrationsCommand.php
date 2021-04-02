@@ -4,18 +4,22 @@ namespace Dskripchenko\LaravelCMI\Components;
 
 use Illuminate\Support\Facades\Artisan;
 
+/**
+ * Class InstallMigrationsCommand
+ * @package Dskripchenko\LaravelCMI\Components
+ */
 abstract class InstallMigrationsCommand extends BaseCommand
 {
     protected $signature = 'cmi:component:install';
 
     protected $description = "Installing component migrations";
 
-    public function handle()
+    public function handle(): void
     {
         $this->installMigrations();
     }
 
-    protected function installMigrations()
+    protected function installMigrations(): void
     {
         $message = trans("Install component migrations") . " {$this->componentName}?";
         if ($this->confirm($message, false)) {
@@ -27,7 +31,10 @@ abstract class InstallMigrationsCommand extends BaseCommand
         }
     }
 
-    protected function copyMigrationsToPath($path)
+    /**
+     * @param string $path
+     */
+    protected function copyMigrationsToPath(string $path): void
     {
         $migrations = $this->getMigrationFilePathMap($path);
         if (!is_dir($path)) {
@@ -48,7 +55,11 @@ abstract class InstallMigrationsCommand extends BaseCommand
         }
     }
 
-    protected function getMigrationFilePathMap($targetDir)
+    /**
+     * @param string $targetDir
+     * @return array
+     */
+    protected function getMigrationFilePathMap(string $targetDir): array
     {
         $dir = $this->getMigrationsDir();
         $timestamp = date('Y_m_d_His');

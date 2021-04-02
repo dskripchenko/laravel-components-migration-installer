@@ -1,11 +1,13 @@
 <?php
 
-
 namespace Dskripchenko\LaravelCMI\Components;
-
 
 use Illuminate\Support\Facades\Artisan;
 
+/**
+ * Class UninstallMigrationsCommand
+ * @package Dskripchenko\LaravelCMI\Components
+ */
 class UninstallMigrationsCommand extends BaseCommand
 {
     protected $signature = 'cmi:component:uninstall';
